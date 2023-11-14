@@ -21,17 +21,14 @@ public class GameOfLife {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
 
-        // Wymiary planszy
-        int n = 10; // Domyślny rozmiar planszy
+        int n = 10; 
         if (args.length > 0) {
             n = Integer.parseInt(args[0]);
         }
 
-        // Inicjalizacja planszy
         boolean[][] board = new boolean[n][n];
         initializeBoard(board);
 
-        // Symulacja gry
         while (true) {
             printBoard(board);
             board = getNextGeneration(board);
@@ -39,31 +36,28 @@ public class GameOfLife {
         }
     }
 
-    // Inicjalizacja planszy losowymi stanami
     public static void initializeBoard(boolean[][] board) {
         Random random = new Random();
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
-                board[i][j] = random.nextDouble() < 0.3; // Początkowo 30% komórek jest "żywych"
+                board[i][j] = random.nextDouble() < 0.3;
             }
         }
     }
 
-    // Wyświetlenie aktualnego stanu planszy
     public static void printBoard(boolean[][] board) {
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[i].length; j++) {
                 if (board[i][j]) {
-                    System.out.print("■ "); // Żywa komórka
+                    System.out.print("■ "); 
                 } else {
-                    System.out.print("□ "); // Martwa komórka
+                    System.out.print("□ ");
                 }
             }
             System.out.println();
         }
     }
 
-    // Obliczenie następnego stanu planszy
     public static boolean[][] getNextGeneration(boolean[][] board) {
         int n = board.length;
         boolean[][] newBoard = new boolean[n][n];
@@ -82,7 +76,6 @@ public class GameOfLife {
         return newBoard;
     }
 
-    // Obliczenie liczby żywych sąsiadów danej komórki
     public static int countLiveNeighbors(boolean[][] board, int x, int y) {
         int n = board.length;
         int count = 0;
