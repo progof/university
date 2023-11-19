@@ -34,7 +34,7 @@
 
 \"(\\.|[^\"])*\"        { printf("String: %s\n", yytext); }
 
-[ \t\n]                 ; // Ignore whitespace and newline
+[ \t\n]                 ; 
 .                       { printf("Unknown token: %s\n", yytext); }
 
 %%
