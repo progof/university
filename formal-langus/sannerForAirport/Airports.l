@@ -1,33 +1,41 @@
 %{
 #include <stdio.h>
 #include <string.h>
+
+// Zmienne globalne
+int printing = 0;  // Flaga wypisywania danych dla danego kraju
+char kraj[256];     // Przechowuje kraj, dla którego szukamy lotnisk
 %}
 
 %option noyywrap
 
 %%
-\n          { return yytext[0]; }
-[^,\n]+     { printf("%s, %s\n", yytext, country); }
-,           { /* ignore commas */ }
+\"[^\n]*\n  // Ignoruj całe linie danych (np. nagłówki)
+[0-9]+;[0-9]+;\"   // Ignoruj pierwsze dwa pola danych
+
+[^;]+;[^;]+;      // Odczytaj kraj i miasto
+{
+    if (printing) {
+        // Sprawdź, czy kraj pasuje do poszukiwanego kraju
+        if (strstr(yytext, kraj)) {
+            printf("%s, %s\n", yytext, yytext);
+        }
+    }
+}
+
 %%
 
 int main(int argc, char *argv[]) {
     if (argc != 2) {
-        fprintf(stderr, "Usage: %s <country>\n", argv[0]);
+        fprintf(stderr, "Użycie: %s <kraj>\n", argv[0]);
         return 1;
     }
 
-    FILE *file = fopen("Lotniska.csv", "r");
-    if (!file) {
-        perror("Unable to open Lotniska.csv");
-        return 1;
-    }
+    // Przypisz kraj z argumentu
+    strcpy(kraj, argv[1]);
 
-    char *country = argv[1];
-    yyin = file;
+    // Uruchom analizator leksykalny
     yylex();
-
-    fclose(file);
 
     return 0;
 }

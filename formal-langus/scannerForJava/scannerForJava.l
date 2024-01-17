@@ -15,22 +15,21 @@
 "float"     { printf("Type: float\n"); }
 "double"    { printf("Type: double\n"); }
 "char"      { printf("Type: char\n"); }
-"String"    { printf("Type: String\n"); }
 
-"+"         { printf("Operator: +\n"); }
-"-"         { printf("Operator: -\n"); }
-"*"         { printf("Operator: *\n"); }
-"/"         { printf("Operator: /\n"); }
+"int|float|double|char"  { printf("Type: %s\n", yytext); }
 
-"="         { printf("Assignment Operator: =\n"); }
+[-+*/]      { printf("Arithmetic Operator: %s\n", yytext); }
 
-"//"        { printf("Single-line Comment\n"); }
+"="             { printf("Assignment Operator: =\n"); }
+"\/\/".         { printf("Single-line Comment\n"); }
+"\/\*".*"\*\/"  { printf("Multi-line Comment\n"); }
 
-[a-zA-Z_][a-zA-Z0-9_]*   { printf("Identifier: %s\n", yytext); }
+[a-zA-Z_][a-zA-Z0-9_]*          { printf("Identifier: %s\n", yytext); }
 
-[0-9]+                  { printf("Integer: %s\n", yytext); }
-[0-9]+"."[0-9]+[fF]?    { printf("Float: %s\n", yytext); }
-[0-9]+"."[0-9]+[dD]?    { printf("Double: %s\n", yytext); }
+[0-9]+                          { printf("Integer: %s\n", yytext); }
+[0-9]+[fF]?(\.[0-9]{1,7})?      { printf("Float: %s\n", yytext); }
+[0-9]+(\.[0-9]{1,15})?[dD]?     { printf("Double: %s\n", yytext); }
+\"(\\.|[^\"])*\"                { printf("String: %s\n", yytext); }
 
 \"(\\.|[^\"])*\"        { printf("String: %s\n", yytext); }
 
