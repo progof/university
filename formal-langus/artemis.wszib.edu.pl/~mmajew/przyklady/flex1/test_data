@@ -1,0 +1,6 @@
+Dzisiaj jest 22 Oct 2022.
+Test skanera rozpoznajacego daty w formacie dd.mm.rrrr, np. 23.10.2022.
+Dzisiaj jest 22/10/2022.
+Test skanera rozpoznajacego daty w formacie dd.mm.rrrr, np. 24.10.2022.
+Dzisiaj jest 22 X 2022.
+Test skanera rozpoznajacego daty w formacie dd.mm.rrrr, np. 25.10.2022.

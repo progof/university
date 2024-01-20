@@ -162,16 +162,58 @@ WHERE NOT EXISTS (
     JOIN [Order Details] AS od ON od.OrderID = o.OrderID
     JOIN Products AS p ON p.ProductID = od.ProductID
     JOIN Categories AS cat ON cat.CategoryID = p.CategoryID
-    WHERE cat.CategoryName = 'Confections'
+    WHERE cat.CategoryName = 'Confections' AND o.CustomerID = c.CustomerID
 ) 
 ORDER BY c.CompanyName;
 
--- 4.6 Wybierz nazwy i numery telefonów klientów, którzy w 1997r nie kupowali produktów z kategorii Confections.
 
+SELECT DISTINCT c.CompanyName, c.Phone
+FROM Customers AS c
+WHERE NOT EXISTS (
+    SELECT o.CustomerID
+    FROM Orders AS o
+    JOIN [Order Details] AS od ON od.OrderID = o.OrderID
+    JOIN Products AS p ON p.ProductID = od.ProductID
+    JOIN Categories AS cat ON cat.CategoryID = p.CategoryID
+    WHERE cat.CategoryName = 'Confections' AND o.CustomerID = c.CustomerID
+) 
+ORDER BY c.CompanyName;
+
+
+-- 4.6 Wybierz nazwy i numery telefonów klientów, którzy w 1997r nie kupowali produktów z kategorii Confections.
+SELECT DISTINCT c.CompanyName, c.Phone
+FROM Customers AS c
+WHERE NOT EXISTS (
+    SELECT o.CustomerID
+    FROM Orders AS o
+    JOIN [Order Details] AS od ON od.OrderID = o.OrderID
+    JOIN Products AS p ON p.ProductID = od.ProductID
+    JOIN Categories AS cat ON cat.CategoryID = p.CategoryID
+    WHERE cat.CategoryName = 'Confections' AND o.CustomerID = c.CustomerID AND YEAR(o.OrderDate) = 1997
+) 
+ORDER BY c.CompanyName;
 
 -- Ćwiczenie 5.
 -- 5.1 Podaj wszystkie produkty których cena jest mniejsza niż średnia cena produktu
+SELECT *
+FROM Products
+WHERE UnitPrice < (SELECT MAX(UnitPrice) 
+                    FROM Products WHERE UnitPrice > 0);
+
+SELECT *
+FROM Products
+WHERE UnitPrice < (SELECT AVG(UnitPrice) FROM Products);
+
+
 -- 5.2 Podaj wszystkie produkty których cena jest mniejsza niż średnia cena produktu danej kategorii
+SELECT ProductName, 
+    ( SELECT CategoryName
+        FROM Categories AS c
+        WHERE p.CategoryID = c.CategoryID
+     ) as Category
+FROM Products AS p
+WHERE UnitPrice < (SELECT MAX(UnitPrice) 
+                    FROM Products WHERE UnitPrice > 0);
 -- 5.3 Dla każdego produktu podaj jego nazwę, cenę, średnią cenę wszystkich produktów oraz różnicę między ceną produktu a średnią ceną wszystkich produktów
 -- 5.4 Dla każdego produktu podaj jego nazwę kategorii, nazwę produktu, cenę, średnią cenę wszystkich produktów danej kategorii oraz różnicę między ceną produktu a średnią ceną wszystkich produktów danej kategorii
 

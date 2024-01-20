@@ -1,0 +1,36 @@
+%{
+/* pary.l
+   Tworzy statystyke wystapien wszystkich par malych liter */
+
+int digram [26][26];
+int i, j;
+
+%}
+
+%%
+[a-z][a-z]	 {
+		  digram[yytext[0]-97][yytext[1]-97]++;
+		  REJECT;
+		 }
+
+.|\n		 /* empty */
+
+
+%%
+
+
+int main(){
+
+/* wyzeruj tablice */
+  for(i=0; i<26; i++)
+    for(j=0; j<26; j++)
+       digram[i][j] = 0;
+
+  yylex(); 
+
+/* wypisz tablice */
+    for(i=0; i<26; i++)
+       for(j=0; j<26; j++)
+          if (digram[i][j] != 0)
+             printf("%c,%c: %d\n", i+97, j+97, digram[i][j]);
+}

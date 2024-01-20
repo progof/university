@@ -1,0 +1,22 @@
+while ( a != 0 )
+  a = a - 1;
+
+while ( licznik > 0 ) {
+  licznik = licznik - i;
+  i = i + 1;
+}
+
+while ( licznik > 0 ) {
+  i++;
+  licznik = licznik - i;
+  j = i;
+}
+
+while ( licznik > 0 ) {
+  licznik = licznik - i;
+  while ( i <= 10 ) {
+    i--;
+    j++
+  }
+}
+

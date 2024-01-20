@@ -1,0 +1,60 @@
+int a = 10;
+int b = 0;
+
+// przyklad 1
+
+if (a =! 0)  
+   a = a - 1;
+else 
+   b = b + 1;
+
+// przyklad 2
+
+if (a > 0)  {
+   a--;
+   b++;
+} else {
+    // Wypisz wartosc zmiennej a
+    System.out.println("Zmienna a ma wartosc:" + a);
+}
+
+// przyklad 3
+
+if (a > 0)  {
+   a = a - 1;
+   b = b + 1;
+   }
+else if (b < 10)  
+		b = b + 2;
+	else
+		a = a + 2;
+   
+// przyklad 4
+   
+if (a<10) 
+    if (a<5)
+        if (a<0)
+		    System.out.println("a<0");
+		else
+			System.out.println("a>=0 i a<5");
+	else
+		System.out.println("a>=5 i a<10");
+else
+	System.out.println("a>10");
+
+// przyklad 5
+
+if (a<10) 
+    if (a<5)
+        if (a<0)
+		    System.out.println("a<0");
+		else
+			System.out.println("a>=0 i a<5");
+	else if (b<0)
+			System.out.println("b<0");
+		else	
+			System.out.println("b>=0");
+	else
+		System.out.println("a>=5 i a<10");
+else
+	System.out.println("a>10");

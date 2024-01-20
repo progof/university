@@ -1,0 +1,5 @@
+Analizatory LR
+Po opisaniu dzialania analizatora LR przedstawimy trzy techniki konstruowania tablic LR dla gramatyk.
+Pierwsza metoda, nazwana prostym LR (lub SLR), jest najlatwiejsza w implementacji, ale najslabsza z prezentowanych.
+Druga metoda, nazywana kanonicznym LR, jest najskuteczniejsza i najdrozsza.
+Metoda LALR dziala dla wiekszosci gramatyk jezykow programowania i z pewnym wysilkiem moze byc wydajnie zaimplementowana.

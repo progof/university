@@ -1,0 +1,9 @@
+<!DOCTYPE html>
+<html>
+<body>
+    <p>Grammars for yacc are described using a variant of <b>Backus Naur Form</b> (BNF).<br>
+    This technique was pioneered by John Backus and Peter Naur.<br>
+    A BNF grammar can be used to express <b>context-free languages</b>.<br>
+    Most constructs in modern programming languages can be represented in <b>BNF</b>.</p>
+</body>
+</html>

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+    <h1>HTML basics</h1>
+
+    <p>This is a paragraph<br>
+       with a line break.</p>
+    <p><b>This text is bold.</b></p>
+
+    <h2>HTML anchor element</h2>
+
+    <p>An example of a HTML anchor element:<br>
+    <a href="https://www.w3schools.com">link to w3schools website</a></p>
+
+</body>
+</html> 

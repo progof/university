@@ -1,0 +1,5 @@
+example : lex.yy.c
+	gcc -o example lex.yy.c -lfl
+
+lex.yy.c : example.l
+	flex example.l

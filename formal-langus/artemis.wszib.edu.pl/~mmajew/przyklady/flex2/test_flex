@@ -1,0 +1,5 @@
+flex
+flex przykladlex.l
+flex -o example.c example.l
+flex przyklad.l -o przyklad.l
+flex yylex.c
