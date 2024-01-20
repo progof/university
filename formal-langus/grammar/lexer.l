@@ -20,8 +20,8 @@
 ";"              { return SEMICOLON; }
 "{"              { return LBRACE; }
 "}"              { return RBRACE; }
-[ \t\n]          { /* ignoruj białe znaki */ }
-.                { printf("Nieznany znak: %s\n", yytext); }
+[ \t\n]          { /* ignore white characters */ }
+.                { printf("Unknown mark: %s\n", yytext); }
 
 %%
 
