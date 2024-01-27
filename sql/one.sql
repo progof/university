@@ -1,4 +1,4 @@
--- Grupa 1 
+-- Grupa 1  Oleh Ortynskyi
 -----------
 
 -- Zadanie 1
@@ -73,12 +73,6 @@ where ShipCountry = 'Argentina' and Year(OrderDate) = 1997;
 -- Wyświetl imiona i nazwiska pracowników, którzy nie obsługiwali zamówień w dniu 1997-09-05. Zbór wynikowy powinien zawierać imię, nazwisko 
 -- oraz wiek (liczbę lat) pracownika (baza northwind)
 
-SELECT e.LastName, e.FirstName, Year(CURRENT_TIMESTAMP) - Year(e.BirthDate)as Age
-FROM employees as e LEFT JOIN orders as o
-ON e.EmployeeID = o.EmployeeID 
-WHERE YEAR(o.OrderDate) = 1997 AND MONTH(o.OrderDate) = 9 AND DAY(o.OrderDate) = 5 AND o.OrderDate IS NULL
-group by e.EmployeeID having count(o.OrderID) = 0;
-use Northwind;
 
 select FirstName, LastName, Year(CURRENT_TIMESTAMP) - Year(BirthDate) as Old
 from dbo.Employees where EmployeeID in (select Employees.EmployeeID
@@ -88,12 +82,3 @@ from dbo.Employees where EmployeeID in (select Employees.EmployeeID
 
     
 
-select  firstname + ' ' + lastname as name,city, postalcode
-from employees
-union
-select companyname, city, postalcode
-from customers
-
-select t.orderid, t.CustomerID
- from (select orderid, customerid
-         from orders) as t

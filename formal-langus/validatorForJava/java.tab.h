@@ -48,7 +48,19 @@
      LEQ = 264,
      GEQ = 265,
      PRINT = 266,
-     STRING = 267
+     STRING = 267,
+     GREATER_OPEN = 268,
+     GREATER_CLOSE = 269,
+     ASSIGNMENT_OP = 270,
+     PAREN_OPEN = 271,
+     PAREN_CLOSE = 272,
+     LBRACE = 273,
+     RBRACE = 274,
+     SEMICOLON = 275,
+     SUB_OP = 276,
+     ADD_OP = 277,
+     DIV_OP = 278,
+     MUL_OP = 279
    };
 #endif
 /* Tokens.  */
@@ -62,6 +74,18 @@
 #define GEQ 265
 #define PRINT 266
 #define STRING 267
+#define GREATER_OPEN 268
+#define GREATER_CLOSE 269
+#define ASSIGNMENT_OP 270
+#define PAREN_OPEN 271
+#define PAREN_CLOSE 272
+#define LBRACE 273
+#define RBRACE 274
+#define SEMICOLON 275
+#define SUB_OP 276
+#define ADD_OP 277
+#define DIV_OP 278
+#define MUL_OP 279
 
 
 

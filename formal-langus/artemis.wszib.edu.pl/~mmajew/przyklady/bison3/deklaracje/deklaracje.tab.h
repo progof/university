@@ -39,37 +39,13 @@
    /* Put the tokens into the symbol table, so that GDB and other debuggers
       know about them.  */
    enum yytokentype {
-     INCREMENT = 258,
-     DECREMENT = 259,
-     SEMICOLON = 260,
-     DIV_OP = 261,
-     ADD_OP = 262,
-     SUB_OP = 263,
-     MUL_OP = 264,
-     INC_OP = 265,
-     ASSIGNMENT_OP = 266,
-     DEC_OP = 267,
-     INTEGER = 268,
-     IDENTIFIER = 269,
-     LBRACE = 270,
-     RBRACE = 271
+     TYP = 258,
+     ID = 259
    };
 #endif
 /* Tokens.  */
-#define INCREMENT 258
-#define DECREMENT 259
-#define SEMICOLON 260
-#define DIV_OP 261
-#define ADD_OP 262
-#define SUB_OP 263
-#define MUL_OP 264
-#define INC_OP 265
-#define ASSIGNMENT_OP 266
-#define DEC_OP 267
-#define INTEGER 268
-#define IDENTIFIER 269
-#define LBRACE 270
-#define RBRACE 271
+#define TYP 258
+#define ID 259
 
 
 

@@ -155,3 +155,6 @@ select  lastname, e.employeeid
   on o.employeeid = e.employeeid
  where o.orderdate = '1997-09-05'
 
+EXECUTE sp_generate_dependencies_diagram 
+    @database_name = 'Northwind',
+    @table_name = 'Orders';

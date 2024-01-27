@@ -42,31 +42,63 @@ GROUP BY ProductID;
 -- Ćwiczenie 2.
 -- 2.1 Dla każdego klienta podaj łączną wartość jego zamówień (bez opłaty za przesyłkę) z 1996r
 
-SELECT c.CustomerID, c.CompanyName, SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS TotalOrderValue
-FROM Customers AS c
-    JOIN Orders AS o ON c.CustomerID = o.CustomerID
+SELECT COUNT(*) FROM Customers
+
+
+SELECT Customers.CustomerID, Customers.CompanyName, ISNULL(SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)), 0) AS TotalOrderValue
+FROM Orders AS o
     JOIN [Order Details] AS od ON o.OrderID = od.OrderID
-WHERE YEAR(o.OrderDate) = 1996
-GROUP BY c.CustomerID, c.CompanyName
+AND YEAR(o.OrderDate) = 1996
+    RIGHT JOIN Customers ON Customers.CustomerID = o.CustomerID
+GROUP BY Customers.CustomerID, Customers.CompanyName
+ORDER BY TotalOrderValue DESC
 
 
-SELECT CustomerID
-        ,CompanyName
-        ,(SELECT SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)) AS TotalOrderValue
-            FROM [Order Details] AS od INNER JOIN Orders AS o ON o.OrderID = od.OrderID
-            WHERE YEAR(o.OrderDate) = 1996 AND o.CustomerID = c.CustomerID) AS OrderSum
+SELECT ISNULL(SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)), 0) AS TotalOrderValue
+FROM Orders AS o
+    JOIN [Order Details] AS od ON o.OrderID = od.OrderID
+AND YEAR(o.OrderDate) = 1996 AND o.CustomerID =  'FOLKO'
+
+
+
+SELECT c.CustomerID, c.CompanyName,
+    (
+        SELECT ISNULL(SUM(od.UnitPrice * od.Quantity * (1 - od.Discount)+ o.Freight), 0) 
+        FROM Orders AS o
+            JOIN [Order Details] AS od ON o.OrderID = od.OrderID
+            AND YEAR(o.OrderDate) = 1996 AND o.CustomerID =  c.CustomerID
+    ) AS TotalOrderValue
 FROM Customers AS c
-GROUP BY CustomerID, CompanyName;
+ORDER BY TotalOrderValue DESC
 
--- 2.2 Dla każdego klienta podaj łączną wartość jego zamówień (uwzględnij opłatę za przesyłkę) z 1996r
-SELECT c.CustomerID
-        ,CompanyName
-        ,(SELECT SUM(od.UnitPrice * od.Quantity * (1 - od.Discount) + o.Freight)
-            FROM [Order Details] AS od INNER JOIN Orders AS o ON o.OrderID = od.OrderID
-            WHERE YEAR(o.OrderDate) = 1996 AND  o.CustomerID = c.CustomerID) AS OrderSum
 
+-- 2.2 Dla każdego klienta podaj łączną wartość jego zamówień 
+-- (uwzględnij opłatę za przesyłkę) z 1996r
+SELECT c.CustomerID, c.CompanyName,
+        (
+            SELECT SUM(od.UnitPrice * od.Quantity * (1 - od.Discount))
+            FROM [Order Details] AS od 
+            JOIN Orders AS o ON o.OrderID = od.OrderID
+            WHERE YEAR(o.OrderDate) = 1996 AND  o.CustomerID = c.CustomerID
+        )
+        +
+        (
+            SELECT SUM(Freight) 
+            FROM Orders AS o
+            WHERE o.CustomerID = c.CustomerID AND YEAR(o.OrderDate) = 1996
+        ) AS OrderSum
 FROM Customers AS c
-GROUP BY c.CustomerID, c.CompanyName;
+ORDER BY OrderSum DESC
+
+SELECT 
+(SELECT SUM(Freight) 
+FROM Orders AS o
+WHERE o.CustomerID = 'QUICK' AND YEAR(o.OrderDate) = 1996 )
++
+(SELECT SUM(od.UnitPrice * od.Quantity * (1 - od.Discount))
+FROM [Order Details] AS od
+    JOIN Orders AS o ON o.OrderID = od.OrderID
+    WHERE o.CustomerID = 'QUICK' AND YEAR(o.OrderDate) = 1996)
 
 -- 2.3 Dla każdego klienta podaj maksymalną wartość zamówienia złożonego przez tego klienta w 1997r
 
@@ -195,6 +227,8 @@ ORDER BY c.CompanyName;
 
 -- Ćwiczenie 5.
 -- 5.1 Podaj wszystkie produkty których cena jest mniejsza niż średnia cena produktu
+SELECT * FROM Products
+
 SELECT *
 FROM Products
 WHERE UnitPrice < (SELECT MAX(UnitPrice) 

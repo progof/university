@@ -7,33 +7,32 @@
 
 %%
 
+
+
 "if"                    { return IF; }
 "else"                  { return ELSE; }
 "=="                    { return EQ; }
 "!="                    { return NEQ; }
 "<="                    { return LEQ; }
 ">="                    { return GEQ; }
-"<"                     { return '<'; }
-">"                     { return '>'; }
-"+"                     { return '+'; }
-"-"                     { return '-'; }
-"*"                     { return '*'; }
-"/"                     { return '/'; }
-"="                     { return '='; }
+"<"                     { return GREATER_OPEN; }
+">"                     { return GREATER_CLOSE; }
+"+"                     { return ADD_OP; }
+"-"                     { return SUB_OP; }
+"*"                     { return MUL_OP; }
+"/"                     { return DIV_OP; }
+"="                     { return ASSIGNMENT_OP; }
 "System.out.println"    { return PRINT; }
 [a-zA-Z_][a-zA-Z0-9_]*  { return IDENTIFIER; }
 [0-9]+                  { return NUMBER; }
 \"([^\"\n]|\\.)*\"      { return STRING; }
-\(                      { return '('; }
-\)                      { return ')'; }
-\{                      { return '{'; }
-\}                      { return '}'; }
-";"                     { return ';'; }
+"("                     { return PAREN_OPEN; }
+")"                     { return PAREN_CLOSE; }
+"{"                     { return LBRACE; }
+"}"                     { return RBRACE; }
+";"                     { return SEMICOLON; }
 [ \t\n]                 ; /* Ignore whitespace */
 
 .                       { printf("Invalid character: %s\n", yytext); exit(1); }
 
 %%
-
-
-
