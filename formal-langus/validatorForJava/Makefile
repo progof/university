@@ -19,5 +19,8 @@ ${PROG}lex.yy.c: ${PROG}lex.l
 run: ${PROG}
 	./${PROG} < test_${PROG}
 
+run2: ${PROG}
+	./${PROG} < test_if_else
+
 clean:
 	rm -f ${PROG} ${PROG}lex.yy.c ${PROG}.tab.c ${PROG}.tab.h

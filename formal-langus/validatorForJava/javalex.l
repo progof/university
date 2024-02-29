@@ -7,8 +7,7 @@
 
 %%
 
-
-
+"int"                   { return INT; }
 "if"                    { return IF; }
 "else"                  { return ELSE; }
 "=="                    { return EQ; }
@@ -21,6 +20,8 @@
 "-"                     { return SUB_OP; }
 "*"                     { return MUL_OP; }
 "/"                     { return DIV_OP; }
+"++"                    { return INC_OP; }
+"--"                    { return DEC_OP; }
 "="                     { return ASSIGNMENT_OP; }
 "System.out.println"    { return PRINT; }
 [a-zA-Z_][a-zA-Z0-9_]*  { return IDENTIFIER; }
@@ -32,6 +33,7 @@
 "}"                     { return RBRACE; }
 ";"                     { return SEMICOLON; }
 [ \t\n]                 ; /* Ignore whitespace */
+"//".*                  ; /* Ignore comments until the end of line */
 
 .                       { printf("Invalid character: %s\n", yytext); exit(1); }
 

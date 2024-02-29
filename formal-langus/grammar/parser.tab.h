@@ -39,53 +39,37 @@
    /* Put the tokens into the symbol table, so that GDB and other debuggers
       know about them.  */
    enum yytokentype {
-     IF = 258,
-     ELSE = 259,
-     IDENTIFIER = 260,
-     NUMBER = 261,
-     EQ = 262,
-     NEQ = 263,
-     LEQ = 264,
-     GEQ = 265,
-     PRINT = 266,
-     STRING = 267,
-     GREATER_OPEN = 268,
-     GREATER_CLOSE = 269,
-     ASSIGNMENT_OP = 270,
-     PAREN_OPEN = 271,
-     PAREN_CLOSE = 272,
-     LBRACE = 273,
-     RBRACE = 274,
-     SEMICOLON = 275,
-     SUB_OP = 276,
-     ADD_OP = 277,
-     DIV_OP = 278,
-     MUL_OP = 279
+     INCREMENT = 258,
+     DECREMENT = 259,
+     SEMICOLON = 260,
+     DIV_OP = 261,
+     ADD_OP = 262,
+     SUB_OP = 263,
+     MUL_OP = 264,
+     INC_OP = 265,
+     ASSIGNMENT_OP = 266,
+     DEC_OP = 267,
+     INTEGER = 268,
+     IDENTIFIER = 269,
+     LBRACE = 270,
+     RBRACE = 271
    };
 #endif
 /* Tokens.  */
-#define IF 258
-#define ELSE 259
-#define IDENTIFIER 260
-#define NUMBER 261
-#define EQ 262
-#define NEQ 263
-#define LEQ 264
-#define GEQ 265
-#define PRINT 266
-#define STRING 267
-#define GREATER_OPEN 268
-#define GREATER_CLOSE 269
-#define ASSIGNMENT_OP 270
-#define PAREN_OPEN 271
-#define PAREN_CLOSE 272
-#define LBRACE 273
-#define RBRACE 274
-#define SEMICOLON 275
-#define SUB_OP 276
-#define ADD_OP 277
-#define DIV_OP 278
-#define MUL_OP 279
+#define INCREMENT 258
+#define DECREMENT 259
+#define SEMICOLON 260
+#define DIV_OP 261
+#define ADD_OP 262
+#define SUB_OP 263
+#define MUL_OP 264
+#define INC_OP 265
+#define ASSIGNMENT_OP 266
+#define DEC_OP 267
+#define INTEGER 268
+#define IDENTIFIER 269
+#define LBRACE 270
+#define RBRACE 271
 
 
 

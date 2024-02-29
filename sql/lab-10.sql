@@ -158,3 +158,58 @@ select  lastname, e.employeeid
 EXECUTE sp_generate_dependencies_diagram 
     @database_name = 'Northwind',
     @table_name = 'Orders';
+
+    SELECT 
+    TABLE_SCHEMA,
+    TABLE_NAME
+FROM 
+    INFORMATION_SCHEMA.TABLES
+WHERE 
+    TABLE_TYPE = 'Northwind';
+
+    DROP SCHEMA IF EXISTS northwind;
+
+    SELECT 
+    COLUMN_NAME,
+    DATA_TYPE
+FROM 
+    INFORMATION_SCHEMA.COLUMNS
+WHERE 
+    TABLE_NAME = 'Orders' AND 
+    TABLE_SCHEMA = 'northwind';
+
+
+    USE Northwind;
+
+SELECT 
+    TABLE_NAME
+FROM 
+    INFORMATION_SCHEMA.
+WHERE 
+    TABLE_SCHEMA = 'dbo';
+
+
+SELECT DISTINCT shippers.companyname
+FROM shippers
+LEFT JOIN orders ON shippers.shipperid = orders.shipvia
+WHERE orders.orderdate IS NULL OR (orders.orderdate < '1996-07-05' OR orders.orderdate > '1996-07-10');
+
+
+SELECT
+    employees.firstname,
+    employees.lastname,
+    employees.address,
+    SUM(order_details.unit_price * order_details.quantity * (1 - [order details].discount)) AS total_order_value
+FROM
+    employees
+JOIN
+    orders ON employees.employeeid = orders.employeeid
+JOIN
+    [order details ON orders.orderid = order_details.orderid
+WHERE
+    EXTRACT(MONTH FROM orders.order_date) = 3
+    AND EXTRACT(YEAR FROM orders.orderdate) = 1997
+GROUP BY
+    employees.employee_id, employees.first_name, employees.last_name, employees.address
+ORDER BY
+    total_order_value DESC;
