@@ -1,6 +1,6 @@
 {
-	"scripts": {
-		"dev": "npx vite"
+  "scripts": {
+	  "dev": "npx vite"
 	},
   "dependencies": {
     "three": "^0.162.0"
