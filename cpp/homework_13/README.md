@@ -2,4 +2,4 @@ Dana jest klasa account_info zawierająca numer konta bankowego, nazwisko właś
 
 Przykładowy wynik działania programu:
 
-[Imgur](https://i.imgur.com/mh7prQp.png)
+[img]https://i.imgur.com/mh7prQp.png[/img]
