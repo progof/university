@@ -61,10 +61,18 @@ document.body.appendChild(renderer.domElement);
 const playerGeometry = new THREE.BoxGeometry();
 const playerMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
 const playerShip = new THREE.Mesh(playerGeometry, playerMaterial);
+// Перемещаем корабль игрока ниже по оси Y
+playerShip.position.y = -5; // Примерное новое положение корабля игрока
+
 scene.add(playerShip);
 
 // Ustawiamy pozycję kamery nad statkiem gracza i patrzącą na niego
-camera.position.set(0, 0, 10);
+// camera.position.set(0, 0, 10);
+// camera.rotateZ(45);
+// Устанавливаем позицию камеры над кораблем игрока и направляем ее вниз, чтобы видеть врагов сверху
+camera.position.set(0, 10, 0);
+camera.rotation.set(-Math.PI / 2, 0, 0); // Поворачиваем камеру на 90 градусов влево
+
 camera.lookAt(playerShip.position);
 
 // Tablica do przechowywania wrogich statków
