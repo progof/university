@@ -52,7 +52,7 @@ import * as THREE from 'three';
 
 // Tworzymy scenę, kamerę i renderer
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.5, 1000);
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
@@ -61,22 +61,18 @@ document.body.appendChild(renderer.domElement);
 const playerGeometry = new THREE.BoxGeometry();
 const playerMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
 const playerShip = new THREE.Mesh(playerGeometry, playerMaterial);
-// Перемещаем корабль игрока ниже по оси Y
-playerShip.position.y = -5; // Примерное новое положение корабля игрока
-
+// Przesuwamy statek gracza niżej na osi Y
+playerShip.position.y = -10; // Przykładowa nowa pozycja statku gracza
 scene.add(playerShip);
 
 // Ustawiamy pozycję kamery nad statkiem gracza i patrzącą na niego
-// camera.position.set(0, 0, 10);
-// camera.rotateZ(45);
-// Устанавливаем позицию камеры над кораблем игрока и направляем ее вниз, чтобы видеть врагов сверху
 camera.position.set(0, 10, 0);
-camera.rotation.set(-Math.PI / 2, 0, 0); // Поворачиваем камеру на 90 градусов влево
-
+camera.rotation.set(-Math.PI / 2, 0, 0); // Obracamy kamerę o 90 stopni w lewo
 camera.lookAt(playerShip.position);
 
-// Tablica do przechowywania wrogich statków
+// Tablica przechowująca wrogie statki
 const enemies = [];
+let killedEnemies = 0; // Licznik zabitych wrogów
 
 // Limit generowanych wrogich statków
 const maxEnemies = 5;
@@ -89,7 +85,7 @@ function generateEnemy() {
         const enemyShip = new THREE.Mesh(enemyGeometry, enemyMaterial);
         const randomX = getRandomNumber(-10, 10); // Losowa pozycja w osi X
         const randomZ = getRandomNumber(-50, -20); // Losowa pozycja w osi Z (statki będą pojawiały się przed graczem)
-        enemyShip.position.set(randomX, 0, randomZ);
+        enemyShip.position.set(randomX, -10, randomZ); // Przesuwamy wrogie statki na ten sam poziom Y co statek gracza
         scene.add(enemyShip);
         enemies.push(enemyShip);
     }
@@ -115,7 +111,7 @@ function movePlayer(direction) {
 
 // Funkcja do strzelania
 function shoot() {
-    const bulletGeometry = new THREE.BoxGeometry();
+    const bulletGeometry = new THREE.ShapeGeometry();
     const bulletMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
     const bullet = new THREE.Mesh(bulletGeometry, bulletMaterial);
     bullet.position.copy(playerShip.position);
@@ -130,6 +126,8 @@ function shoot() {
                 scene.remove(bullet);
                 scene.remove(enemy);
                 enemies.splice(index, 1);
+                killedEnemies++; // Zwiększ licznik zabitych wrogów
+                updateKilledEnemiesCounter(); // Aktualizuj licznik zabitych wrogów na ekranie
             }
         });
         if (bullet.position.z < -50) {
@@ -156,29 +154,45 @@ function checkPlayerCollision() {
 function stopGame() {
     // Zatrzymujemy animację
     cancelAnimationFrame(animationId);
-    // Wyświetlamy komunikat o przegranej grze
+
+    // Tworzymy kontener dla komunikatu o przegranej grze
+    const gameOverContainer = document.createElement('div');
+    gameOverContainer.style.position = 'absolute';
+    gameOverContainer.style.width = '300px';
+    gameOverContainer.style.padding = '20px';
+    gameOverContainer.style.background = 'rgba(255, 255, 255, 0.8)';
+    gameOverContainer.style.borderRadius = '10px';
+    gameOverContainer.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.5)';
+    gameOverContainer.style.textAlign = 'center';
+    gameOverContainer.style.top = '50%';
+    gameOverContainer.style.left = '50%';
+    gameOverContainer.style.transform = 'translate(-50%, -50%)';
+    
+    // Dodajemy tekst komunikatu o przegranej grze
     const gameOverText = document.createElement('div');
-    gameOverText.style.position = 'absolute';
-    gameOverText.style.width = '100%';
-    gameOverText.style.textAlign = 'center';
     gameOverText.style.color = 'green';
-    gameOverText.style.top = '50%';
-    gameOverText.innerText = 'Przegrałeś! Naciśnij przycisk, aby zacząć grę ponownie.';
-    document.body.appendChild(gameOverText);
+    gameOverText.innerText = 'Przegrałeś!';
+    gameOverText.style.marginBottom = '20px';
+    gameOverContainer.appendChild(gameOverText);
+    
     // Tworzymy przycisk do restartu gry
     const restartButton = document.createElement('button');
     restartButton.innerText = 'Restart';
-    restartButton.style.position = 'absolute';
-    restartButton.style.top = '60%';
-    restartButton.style.left = '50%';
-    restartButton.style.transform = 'translate(-50%, -50%)';
+    restartButton.style.padding = '10px 20px';
+    restartButton.style.background = 'green';
+    restartButton.style.color = 'white';
+    restartButton.style.border = 'none';
+    restartButton.style.borderRadius = '5px';
+    restartButton.style.cursor = 'pointer';
     restartButton.addEventListener('click', () => {
         // Usuwamy komunikat o przegranej grze i restartujemy grę
-        document.body.removeChild(gameOverText);
-        document.body.removeChild(restartButton);
+        document.body.removeChild(gameOverContainer);
         restartGame();
     });
-    document.body.appendChild(restartButton);
+    gameOverContainer.appendChild(restartButton);
+
+    // Dodajemy kontener do body dokumentu
+    document.body.appendChild(gameOverContainer);
 }
 
 // Funkcja do restartowania gry
@@ -188,8 +202,13 @@ function restartGame() {
         scene.remove(enemy);
     });
     enemies.length = 0;
+    // Zerujemy licznik zabitych wrogów
+    killedEnemies = 0;
+    // Aktualizujemy licznik zabitych wrogów na ekranie
+    updateKilledEnemiesCounter();
     // Restartujemy animację
     animate();
+    startGeneratingEnemies();
 }
 
 // Funkcja do animacji obiektów
@@ -201,16 +220,13 @@ function animate() {
         enemy.position.z += 0.1; // Dodajemy ruch wrogich statków
     });
 
-    // Generowanie wrogich statków
-    generateEnemy();
-
     // Sprawdzamy kolizję z graczem
     checkPlayerCollision();
 
     renderer.render(scene, camera);
 }
 
-// Obsługa klawiatury
+// Funkcja do obsługi klawiatury
 document.addEventListener('keydown', (event) => {
     switch (event.key) {
         case 'ArrowLeft':
@@ -229,4 +245,34 @@ document.addEventListener('keydown', (event) => {
 let animationId;
 animate();
 
+// Funkcja startująca generowanie wrogów
+function startGeneratingEnemies() {
+    setInterval(() => {
+        generateEnemy();
+    }, 1000); // Wywołuj co sekundę, dostosuj czas według potrzeb
+}
+
+// Rozpocznij generowanie wrogów
+startGeneratingEnemies();
+
+// Funkcja aktualizująca licznik zabitych wrogów na ekranie
+function updateKilledEnemiesCounter() {
+    const counterElement = document.getElementById('killedEnemiesCounter');
+    if (counterElement) {
+        counterElement.innerText = 'Zabitych wrogów: ' + killedEnemies;
+    } else {
+        const counterContainer = document.createElement('div');
+        counterContainer.id = 'killedEnemiesCounter';
+        counterContainer.style.position = 'fixed';
+        counterContainer.style.bottom = '20px'; // Ustawiamy na dolny margines
+        counterContainer.style.left = '20px'; // Ustawiamy na lewy margines
+        counterContainer.style.padding = '10px';
+        counterContainer.style.background = 'rgba(255, 255, 255, 0.8)';
+        counterContainer.style.borderRadius = '5px';
+        counterContainer.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.5)';
+        counterContainer.style.color = 'green';
+        counterContainer.innerText = 'Zabitych wrogów: ' + killedEnemies;
+        document.body.appendChild(counterContainer);
+    }
+}
 
