@@ -1,54 +1,105 @@
-// Импорт необходимых модулей из Three.js
+// // Импортируем необходимые модули Three.js
+// import * as THREE from 'three';
+
+// // Создаем сцену, камеру и рендерер
+// const scene = new THREE.Scene();
+// const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+// const renderer = new THREE.WebGLRenderer();
+// renderer.setSize(window.innerWidth, window.innerHeight);
+// document.body.appendChild(renderer.domElement);
+
+// // Создаем куб
+// const geometry = new THREE.BoxGeometry();
+// const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+// const cube = new THREE.Mesh(geometry, material);
+// scene.add(cube);
+
+// // Позиционируем камеру
+// camera.position.z = 5;
+
+// // Устанавливаем скорость перемещения куба
+// const moveSpeed = 0.5;
+
+// // Создаем функцию для обновления кадров
+// function animate() {
+//     requestAnimationFrame(animate);
+
+//     // Поворачиваем куб
+//     cube.rotation.x += 0.01;
+//     cube.rotation.y += 0.01;
+
+//     renderer.render(scene, camera);
+// }
+
+// // Вызываем функцию animate для начала анимации
+// animate();
+
+// // Обрабатываем нажатия клавиш
+// document.addEventListener('keydown', (event) => {
+//     switch (event.key) {
+//         case 'ArrowLeft':
+//             cube.position.x -= moveSpeed; // Перемещаем куб влево с учетом скорости
+//             break;
+//         case 'ArrowRight':
+//             cube.position.x += moveSpeed; // Перемещаем куб вправо с учетом скорости
+//             break;
+//     }
+// });
+
+
+// Importujemy niezbędne moduły z Three.js
 import * as THREE from 'three';
 
-// Создание сцены, камеры и рендерера
+// Tworzymy scenę, kamerę i renderer
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.5, 1000);
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
-// Установка позиции и поворота камеры
-camera.position.set(-10, 20, 20);
-camera.lookAt(scene.position);
-
-// Создание игрока - космического корабля
+// Tworzymy gracza - statek kosmiczny
 const playerGeometry = new THREE.BoxGeometry();
 const playerMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
 const playerShip = new THREE.Mesh(playerGeometry, playerMaterial);
-// Продвигаем корабль игрока вниз по оси Y и чуть вперед по оси Z
-playerShip.position.y = 1; 
-playerShip.position.z = 10; 
+// Przesuwamy statek gracza niżej na osi Y
+playerShip.position.y = -10; 
 scene.add(playerShip);
 
-// Массив для хранения вражеских кораблей
-const enemies = [];
-let killedEnemies = 0; // Счетчик убитых врагов
-const maxEnemiesPerGroup = 5; // Максимальное количество врагов в группе
-const totalEnemyGroups = 5; // Общее количество групп врагов
-let currentEnemyGroup = 0; // Текущая группа врагов
-let enemyGroupInterval; // Интервал для генерации группы врагов
+// Ustawiamy pozycję kamery nad statkiem gracza i patrzącą na niego
+camera.position.set(0, 10, 0);
+// camera.rotation.set(-Math.PI / 2, 0, 0); 
+camera.rotation.set(0, -Math.PI / 3, 0); // Поворачиваем камеру на 60 градусов влево
 
-// Функция для генерации вражеской группы
-function generateEnemyGroup() {
-    for (let i = 0; i < maxEnemiesPerGroup; i++) {
+
+camera.lookAt(playerShip.position);
+
+// Tablica przechowująca wrogie statki
+const enemies = [];
+let killedEnemies = 0; // Licznik zabitych wrogów
+
+// Limit generowanych wrogich statków
+const maxEnemies = 5;
+
+// Funkcja do generowania wrogich statków
+function generateEnemy() {
+    if (enemies.length < maxEnemies) {
         const enemyGeometry = new THREE.BoxGeometry();
         const enemyMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
         const enemyShip = new THREE.Mesh(enemyGeometry, enemyMaterial);
-        const randomX = getRandomNumber(-10, 10); // Случайная позиция по оси X
-        const randomZ = getRandomNumber(-50, -20); // Случайная позиция по оси Z
-        enemyShip.position.set(randomX, 1, randomZ); // Позиция вражеского корабля
+        const randomX = getRandomNumber(-10, 10); // Losowa pozycja w osi X
+        const randomZ = getRandomNumber(-50, -20); // Losowa pozycja w osi Z (statki będą pojawiały się przed graczem)
+        enemyShip.position.set(randomX, -10, randomZ); // Przesuwamy wrogie statki na ten sam poziom Y co statek gracza
         scene.add(enemyShip);
         enemies.push(enemyShip);
     }
 }
 
-// Функция для генерации случайного числа в заданном диапазоне
+// Funkcja do generowania losowych liczb z zakresu
 function getRandomNumber(min, max) {
     return Math.random() * (max - min) + min;
 }
 
-// Функция для движения игрока
+// Funkcja do ruchu gracza
 function movePlayer(direction) {
     const speed = 0.5;
     switch (direction) {
@@ -61,29 +112,29 @@ function movePlayer(direction) {
     }
 }
 
-// Функция для стрельбы
+// Funkcja do strzelania
 function shoot() {
     const bulletGeometry = new THREE.ShapeGeometry();
     const bulletMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
     const bullet = new THREE.Mesh(bulletGeometry, bulletMaterial);
     bullet.position.copy(playerShip.position);
     scene.add(bullet);
-    // Движение пули
+    // Ruch strzału
     function moveBullet() {
         bullet.position.z -= 0.5;
-        // Проверка столкновения пули с врагами
+        // Sprawdzanie kolizji strzału z wrogami
         enemies.forEach((enemy, index) => {
             if (bullet.position.distanceTo(enemy.position) < 1) {
-                // Столкновение с врагом
+                // Kolizja z wrogiem
                 scene.remove(bullet);
                 scene.remove(enemy);
                 enemies.splice(index, 1);
-                killedEnemies++; // Увеличиваем счетчик убитых врагов
-                updateKilledEnemiesCounter(); // Обновляем счетчик убитых врагов на экране
+                killedEnemies++; // Zwiększ licznik zabitych wrogów
+                updateKilledEnemiesCounter(); // Aktualizuj licznik zabitych wrogów na ekranie
             }
         });
         if (bullet.position.z < -50) {
-            // Удаление пули, если она выходит за пределы обзора
+            // Usuwanie strzału, jeśli przekroczy granice widzenia
             scene.remove(bullet);
         } else {
             requestAnimationFrame(moveBullet);
@@ -92,22 +143,22 @@ function shoot() {
     moveBullet();
 }
 
-// Функция для проверки столкновений с игроком
+// Funkcja do sprawdzania kolizji z graczem
 function checkPlayerCollision() {
     enemies.forEach((enemy) => {
         if (playerShip.position.distanceTo(enemy.position) < 1) {
-            // Столкновение с игроком
+            // Kolizja z graczem
             stopGame();
         }
     });
 }
 
-// Функция для завершения игры при столкновении с врагом
+// Funkcja do zatrzymywania gry i wyświetlania komunikatu o przegranej
 function stopGame() {
-    // Остановка анимации
+    // Zatrzymujemy animację
     cancelAnimationFrame(animationId);
 
-    // Создание контейнера для сообщения о проигрыше
+    // Tworzymy kontener dla komunikatu o przegranej grze
     const gameOverContainer = document.createElement('div');
     gameOverContainer.style.position = 'absolute';
     gameOverContainer.style.width = '300px';
@@ -120,16 +171,16 @@ function stopGame() {
     gameOverContainer.style.left = '50%';
     gameOverContainer.style.transform = 'translate(-50%, -50%)';
     
-    // Добавление текста сообщения о проигрыше
+    // Dodajemy tekst komunikatu o przegranej grze
     const gameOverText = document.createElement('div');
     gameOverText.style.color = 'green';
-    gameOverText.innerText = 'Проиграли!';
+    gameOverText.innerText = 'Przegrałeś!';
     gameOverText.style.marginBottom = '20px';
     gameOverContainer.appendChild(gameOverText);
     
-    // Создание кнопки для перезапуска игры
+    // Tworzymy przycisk do restartu gry
     const restartButton = document.createElement('button');
-    restartButton.innerText = 'Перезапустить';
+    restartButton.innerText = 'Restart';
     restartButton.style.padding = '10px 20px';
     restartButton.style.background = 'green';
     restartButton.style.color = 'white';
@@ -137,47 +188,48 @@ function stopGame() {
     restartButton.style.borderRadius = '5px';
     restartButton.style.cursor = 'pointer';
     restartButton.addEventListener('click', () => {
-        // Удаление сообщения о проигрыше и перезапуск игры
+        // Usuwamy komunikat o przegranej grze i restartujemy grę
         document.body.removeChild(gameOverContainer);
         restartGame();
     });
     gameOverContainer.appendChild(restartButton);
 
-    // Добавление контейнера в тело документа
+    // Dodajemy kontener do body dokumentu
     document.body.appendChild(gameOverContainer);
 }
 
-// Функция для перезапуска игры
+// Funkcja do restartowania gry
 function restartGame() {
-    // Удаление всех врагов
+    // Usuwamy wszystkich wrogów
     enemies.forEach((enemy) => {
         scene.remove(enemy);
     });
     enemies.length = 0;
-    // Сброс счетчика убитых врагов
+    // Zerujemy licznik zabitych wrogów
     killedEnemies = 0;
-    // Обновление счетчика убитых врагов на экране
+    // Aktualizujemy licznik zabitych wrogów na ekranie
     updateKilledEnemiesCounter();
-    // Перезапуск анимации
+    // Restartujemy animację
     animate();
+    startGeneratingEnemies();
 }
 
-// Функция для анимации объектов
+// Funkcja do animacji obiektów
 function animate() {
     animationId = requestAnimationFrame(animate);
 
-    // Движение вражеских кораблей
+    // Ruch wrogich statków kosmicznych
     enemies.forEach((enemy) => {
-        enemy.position.z += 0.1; // Движение вперед
+        enemy.position.z += 0.1; // Dodajemy ruch wrogich statków
     });
 
-    // Проверка столкновения с игроком
+    // Sprawdzamy kolizję z graczem
     checkPlayerCollision();
 
     renderer.render(scene, camera);
 }
 
-// Обработчик клавиатуры
+// Funkcja do obsługi klawiatury
 document.addEventListener('keydown', (event) => {
     switch (event.key) {
         case 'ArrowLeft':
@@ -192,47 +244,38 @@ document.addEventListener('keydown', (event) => {
     }
 });
 
-// Начало анимации
+// Rozpoczęcie animacji
 let animationId;
 animate();
 
-// Функция для запуска генерации врагов
+// Funkcja startująca generowanie wrogów
 function startGeneratingEnemies() {
-    // Устанавливаем интервал для генерации группы врагов
-    enemyGroupInterval = setInterval(() => {
-        // Генерируем новую группу врагов, если еще не все группы созданы
-        if (currentEnemyGroup < totalEnemyGroups) {
-            generateEnemyGroup();
-            currentEnemyGroup++;
-        } else {
-            // Останавливаем интервал, если все группы созданы
-            clearInterval(enemyGroupInterval);
-        }
-    }, 5000); // Интервал в 5 секунд (можно изменить по необходимости)
+    setInterval(() => {
+        generateEnemy();
+    }, 1000); // Wywołuj co sekundę, dostosuj czas według potrzeb
 }
 
-// Начать генерацию врагов
+// Rozpocznij generowanie wrogów
 startGeneratingEnemies();
 
-// Функция для обновления счетчика убитых врагов на экране
+// Funkcja aktualizująca licznik zabitych wrogów na ekranie
 function updateKilledEnemiesCounter() {
     const counterElement = document.getElementById('killedEnemiesCounter');
     if (counterElement) {
-        counterElement.innerText = 'Убито врагов: ' + killedEnemies;
+        counterElement.innerText = 'Zabitych wrogów: ' + killedEnemies;
     } else {
         const counterContainer = document.createElement('div');
         counterContainer.id = 'killedEnemiesCounter';
         counterContainer.style.position = 'fixed';
-        counterContainer.style.bottom = '20px'; // Устанавливаем внизу
-        counterContainer.style.left = '20px'; // Устанавливаем слева
+        counterContainer.style.bottom = '20px'; // Ustawiamy na dolny margines
+        counterContainer.style.left = '20px'; // Ustawiamy na lewy margines
         counterContainer.style.padding = '10px';
         counterContainer.style.background = 'rgba(255, 255, 255, 0.8)';
         counterContainer.style.borderRadius = '5px';
         counterContainer.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.5)';
         counterContainer.style.color = 'green';
-        counterContainer.innerText = 'Убито врагов: ' + killedEnemies;
+        counterContainer.innerText = 'Zabitych wrogów: ' + killedEnemies;
         document.body.appendChild(counterContainer);
     }
 }
-
 
