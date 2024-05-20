@@ -9,12 +9,14 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
 // Установка позиции и поворота камеры
-camera.position.set(-10, 20, 20);
+camera.position.set(-12, 15, 30);
 camera.lookAt(scene.position);
 
 // Создание игрока - космического корабля
-const playerGeometry = new THREE.BoxGeometry();
-const playerMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
+const shipTexture = new THREE.TextureLoader().load('ship.jpeg');
+const playerGeometry = new THREE.CylinderGeometry();
+// const playerMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
+const playerMaterial = new THREE.MeshBasicMaterial({ map: shipTexture });
 const playerShip = new THREE.Mesh(playerGeometry, playerMaterial);
 // Продвигаем корабль игрока вниз по оси Y и чуть вперед по оси Z
 playerShip.position.y = 1; 
@@ -25,17 +27,19 @@ scene.add(playerShip);
 const enemies = [];
 let killedEnemies = 0; // Счетчик убитых врагов
 const maxEnemiesPerGroup = 5; // Максимальное количество врагов в группе
-const totalEnemyGroups = 5; // Общее количество групп врагов
+const totalEnemyGroups = 500; // Общее количество групп врагов
 let currentEnemyGroup = 0; // Текущая группа врагов
 let enemyGroupInterval; // Интервал для генерации группы врагов
 
 // Функция для генерации вражеской группы
 function generateEnemyGroup() {
     for (let i = 0; i < maxEnemiesPerGroup; i++) {
-        const enemyGeometry = new THREE.BoxGeometry();
-        const enemyMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+        const enemyTexture = new THREE.TextureLoader().load('backship.jpeg');
+        const enemyGeometry = new THREE.TorusKnotGeometry();
+        // const enemyMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
+        const enemyMaterial = new THREE.MeshBasicMaterial({ map: enemyTexture });
         const enemyShip = new THREE.Mesh(enemyGeometry, enemyMaterial);
-        const randomX = getRandomNumber(-10, 10); // Случайная позиция по оси X
+        const randomX = getRandomNumber(-20, 20); // Случайная позиция по оси X
         const randomZ = getRandomNumber(-50, -20); // Случайная позиция по оси Z
         enemyShip.position.set(randomX, 1, randomZ); // Позиция вражеского корабля
         scene.add(enemyShip);
@@ -50,7 +54,7 @@ function getRandomNumber(min, max) {
 
 // Функция для движения игрока
 function movePlayer(direction) {
-    const speed = 0.5;
+    const speed = 0.9;
     switch (direction) {
         case 'left':
             playerShip.position.x -= speed;
@@ -63,8 +67,9 @@ function movePlayer(direction) {
 
 // Функция для стрельбы
 function shoot() {
-    const bulletGeometry = new THREE.ShapeGeometry();
-    const bulletMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+    const bulletGeometry = new THREE.SphereGeometry (0.2, 16, 8);
+    const bulletMaterial = new THREE.MeshBasicMaterial({ color: 0xFF0000});
+ 
     const bullet = new THREE.Mesh(bulletGeometry, bulletMaterial);
     bullet.position.copy(playerShip.position);
     scene.add(bullet);
@@ -162,6 +167,48 @@ function restartGame() {
     animate();
 }
 
+
+
+const backgroundLights = [];
+
+// Функция для генерации светящихся сфер на заднем плане
+function createBackgroundLights() {
+    const lightCount = 200; 
+    for (let i = 0; i < lightCount; i++) {
+        const light = new THREE.PointLight(0xffffff, 1, 30); 
+        const sphereGeometry = new THREE.SphereGeometry(0.2, 16, 8); 
+        const sphereMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
+        const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+        
+        const randomX = getRandomNumber(-60, 90); 
+        const randomY = getRandomNumber(-40, 70); 
+        const randomZ = getRandomNumber(-50, -10); 
+        
+        light.position.set(randomX, randomY, randomZ);
+        sphere.position.copy(light.position);
+
+        scene.add(light);
+        scene.add(sphere);
+        backgroundLights.push({ light, sphere, velocity: { x: getRandomNumber(-0.01, 0.01), y: getRandomNumber(-0.01, 0.01), z: getRandomNumber(-0.01, 0.01) } });
+    }
+}
+
+// Функция для движения светящихся сфер
+function moveBackgroundLights() {
+    backgroundLights.forEach(({ light, sphere, velocity }) => {
+        light.position.x += velocity.x;
+        light.position.y += velocity.y;
+        light.position.z += velocity.z;
+
+        sphere.position.copy(light.position);
+
+        if (light.position.x < -30 || light.position.x > 30) velocity.x = -velocity.x;
+        if (light.position.y < 0 || light.position.y > 20) velocity.y = -velocity.y;
+        if (light.position.z < -50 || light.position.z > -10) velocity.z = -velocity.z;
+    });
+}
+
+
 // Функция для анимации объектов
 function animate() {
     animationId = requestAnimationFrame(animate);
@@ -173,6 +220,7 @@ function animate() {
 
     // Проверка столкновения с игроком
     checkPlayerCollision();
+    moveBackgroundLights(); // Добавляем движение для светящихся сфер
 
     renderer.render(scene, camera);
 }
@@ -235,4 +283,10 @@ function updateKilledEnemiesCounter() {
     }
 }
 
+
+
+
+
+// Вызов функции для создания светящихся сфер
+createBackgroundLights();
 
