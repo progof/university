@@ -12,7 +12,6 @@ camera.lookAt(scene.position);
 // Player creation - spaceship
 const shipTexture = new THREE.TextureLoader().load('ship.jpeg');
 const playerGeometry = new THREE.CylinderGeometry();
-// const playerMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
 const playerMaterial = new THREE.MeshBasicMaterial({ map: shipTexture });
 const playerShip = new THREE.Mesh(playerGeometry, playerMaterial);
 playerShip.position.y = 1; 
@@ -26,13 +25,13 @@ const maxEnemiesPerGroup = 5; // Maximum number of enemies in a group
 const totalEnemyGroups = 500; // Total number of enemy groups
 let currentEnemyGroup = 0; // Current enemy group
 let enemyGroupInterval; // Interval for generating an enemy group
+let enemySpeed = 0.1; // Initial enemy speed
 
 // Function to generate an enemy group
 function generateEnemyGroup() {
     for (let i = 0; i < maxEnemiesPerGroup; i++) {
         const enemyTexture = new THREE.TextureLoader().load('backship.jpeg');
         const enemyGeometry = new THREE.TorusKnotGeometry();
-        // const enemyMaterial = new THREE.MeshBasicMaterial({ color: 0xff0000 });
         const enemyMaterial = new THREE.MeshBasicMaterial({ map: enemyTexture });
         const enemyShip = new THREE.Mesh(enemyGeometry, enemyMaterial);
         const randomX = getRandomNumber(-20, 20); // Random position on X axis
@@ -48,7 +47,7 @@ function getRandomNumber(min, max) {
 }
 
 function movePlayer(direction) {
-    const speed = 0.9;
+    const speed = 1;
     switch (direction) {
         case 'left':
             playerShip.position.x -= speed;
@@ -71,13 +70,16 @@ function shoot() {
         bullet.position.z -= 0.5;
         // Checking bullet collision with enemies
         enemies.forEach((enemy, index) => {
-            if (bullet.position.distanceTo(enemy.position) < 1) {
+            if (bullet.position.distanceTo(enemy.position) < 2) {
                 // Clashing with the enemy
                 scene.remove(bullet);
                 scene.remove(enemy);
                 enemies.splice(index, 1);
                 killedEnemies++; // Increase the counter of killed enemies
                 updateKilledEnemiesCounter(); // Update the counter of killed enemies on the screen
+                if (killedEnemies % 5 === 0) {
+                    enemySpeed += 0.15; // Increase enemy speed after every 10 kills
+                }
             }
         });
         if (bullet.position.z < -50) {
@@ -93,7 +95,7 @@ function shoot() {
 // Function to check player collision
 function checkPlayerCollision() {
     enemies.forEach((enemy) => {
-        if (playerShip.position.distanceTo(enemy.position) < 1) {
+        if (playerShip.position.distanceTo(enemy.position) < 2) {
             // Stop the game if there is a collision with the enemy
             stopGame();
         }
@@ -154,6 +156,7 @@ function restartGame() {
     enemies.length = 0;
     // Remove all bullets from the scene
     killedEnemies = 0;
+    enemySpeed = 0.1; // Reset enemy speed
     // Restart the generation of enemy groups
     updateKilledEnemiesCounter();
     // Restart the animation
@@ -204,7 +207,7 @@ function animate() {
 
     // Move enemies
     enemies.forEach((enemy) => {
-        enemy.position.z += 0.1; // Move the enemy ship along the Z axis
+        enemy.position.z += enemySpeed; // Move the enemy ship along the Z axis based on the current speed
     });
 
     // Check if the enemy is out of the scene
