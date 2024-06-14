@@ -10,7 +10,7 @@ camera.position.set(-12, 15, 30);
 camera.lookAt(scene.position);
 
 // Player creation - spaceship
-const shipTexture = new THREE.TextureLoader().load('ship.jpeg');
+const shipTexture = new THREE.TextureLoader().load('/images/whiteship.png');
 const playerGeometry = new THREE.CylinderGeometry();
 const playerMaterial = new THREE.MeshBasicMaterial({ map: shipTexture });
 const playerShip = new THREE.Mesh(playerGeometry, playerMaterial);
@@ -30,7 +30,7 @@ let enemySpeed = 0.1; // Initial enemy speed
 // Function to generate an enemy group
 function generateEnemyGroup() {
     for (let i = 0; i < maxEnemiesPerGroup; i++) {
-        const enemyTexture = new THREE.TextureLoader().load('backship.jpeg');
+        const enemyTexture = new THREE.TextureLoader().load('/images/backship.jpeg');
         const enemyGeometry = new THREE.TorusKnotGeometry();
         const enemyMaterial = new THREE.MeshBasicMaterial({ map: enemyTexture });
         const enemyShip = new THREE.Mesh(enemyGeometry, enemyMaterial);
@@ -78,7 +78,7 @@ function shoot() {
                 killedEnemies++; // Increase the counter of killed enemies
                 updateKilledEnemiesCounter(); // Update the counter of killed enemies on the screen
                 if (killedEnemies % 5 === 0) {
-                    enemySpeed += 0.15; // Increase enemy speed after every 10 kills
+                    enemySpeed += 0.15; // Increase enemy speed after every 5 kills
                 }
             }
         });
@@ -183,7 +183,12 @@ function createBackgroundLights() {
 
         scene.add(light);
         scene.add(sphere);
-        backgroundLights.push({ light, sphere, velocity: { x: getRandomNumber(-0.01, 0.01), y: getRandomNumber(-0.01, 0.01), z: getRandomNumber(-0.01, 0.01) } });
+        backgroundLights.push({ light, sphere, velocity: { 
+            x: getRandomNumber(-0.01, 0.01), 
+            y: getRandomNumber(-0.01, 0.01), 
+            z: getRandomNumber(-0.01, 0.01) 
+        } 
+    });
     }
 }
 
