@@ -93,7 +93,7 @@ public class PKmon {
         Producent producent = new Producent(bufor);
         Konsument konsument = new Konsument(bufor);
         producent.start();
-        konsument.start();
+        konsuPKmonWaitNotifystart();
 
         try {
             producent.join();
