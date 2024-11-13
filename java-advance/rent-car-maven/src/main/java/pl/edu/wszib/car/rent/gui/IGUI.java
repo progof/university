@@ -7,12 +7,8 @@ import java.util.List;
 
 public interface IGUI {
     String showMenuAndReadChoice();
-
     void listCars(List<Car> cars);
-
     String readPlate();
-
     void showResultMessage(boolean result);
-
-    User askForCredentials();
+    User aksForCredentials();
 }

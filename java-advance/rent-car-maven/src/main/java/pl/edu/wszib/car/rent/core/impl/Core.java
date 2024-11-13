@@ -1,23 +1,30 @@
-package pl.edu.wszib.car.rent.core;
+package pl.edu.wszib.car.rent.core.impl;
 
-import pl.edu.wszib.car.rent.db.CarRepository;
+import pl.edu.wszib.car.rent.authentication.impl.Authenticator;
+import pl.edu.wszib.car.rent.authentication.IAuthenticator;
+import pl.edu.wszib.car.rent.core.ICore;
 import pl.edu.wszib.car.rent.db.ICarRepository;
+import pl.edu.wszib.car.rent.db.impl.CarRepository;
+import pl.edu.wszib.car.rent.gui.impl.GUI;
 import pl.edu.wszib.car.rent.gui.IGUI;
-import pl.edu.wszib.car.rent.gui.GUI;
-import pl.edu.wszib.car.rent.authentication.Authenticator;
 
 public class Core implements ICore {
     private ICarRepository carRepository = CarRepository.getInstance();
     private IGUI gui = GUI.getInstance();
-    private Authenticator authenticator = Authenticator.getInstance();
+    private IAuthenticator authenticator = Authenticator.getInstance();
     private static final Core instance = new Core();
 
     private Core() {
     }
 
+    @Override
     public void run() {
-
-        boolean running = this.authenticator.authenticate(this.gui.askForCredentials());
+        boolean running = false;
+        int trys = 0;
+        while(!running && trys < 3) {
+            running = this.authenticator.authenticate(this.gui.aksForCredentials());
+            trys++;
+        }
         while (running) {
             switch (this.gui.showMenuAndReadChoice()) {
                 case "1":

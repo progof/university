@@ -1,16 +1,10 @@
 package pl.edu.wszib.car.rent.db;
 
-import java.util.List;
-
 import pl.edu.wszib.car.rent.model.Car;
 
+import java.util.List;
+
 public interface ICarRepository {
-    void addCar(Car car);
-
-    void removeCar(String plate);
-
-    Car getCar(String plate);
-
-    List<Car> getAllCars();
-
+    boolean rentCar(String plate);
+    List<Car> getCars();
 }
