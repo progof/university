@@ -1,6 +1,5 @@
 .DS_Store
 *.class
-*.c
 dist
 node_modules
 .env
