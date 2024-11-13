@@ -6,26 +6,30 @@
 
 // public class ReaderWriterProblem {
 
-// // Implementacja z użyciem Semaforów
 // static class LibraryWithSemaphores {
-// private final Semaphore readLock = new Semaphore(1, true);
 // private final Semaphore writeLock = new Semaphore(1, true);
 // private final AtomicInteger readersCount = new AtomicInteger(0);
+// private final boolean prioritizeWriters;
+
+// public LibraryWithSemaphores(boolean prioritizeWriters) {
+// this.prioritizeWriters = prioritizeWriters;
+// }
 
 // public void startReading() throws InterruptedException {
-// readLock.acquire();
-// if (readersCount.incrementAndGet() == 1) {
+// if (prioritizeWriters) {
+// writeLock.acquire();
+// writeLock.release();
+// }
+// readersCount.incrementAndGet();
+// if (readersCount.get() == 1) {
 // writeLock.acquire();
 // }
-// readLock.release();
 // }
 
-// public void finishReading() throws InterruptedException {
-// readLock.acquire();
+// public void finishReading() {
 // if (readersCount.decrementAndGet() == 0) {
 // writeLock.release();
 // }
-// readLock.release();
 // }
 
 // public void startWriting() throws InterruptedException {
@@ -37,7 +41,6 @@
 // }
 // }
 
-// // Implementacja z użyciem Zmiennych Warunkowych
 // static class LibraryWithConditions {
 // private final Lock lock = new ReentrantLock(true);
 // private final Condition canRead = lock.newCondition();
@@ -45,11 +48,16 @@
 // private int readers = 0;
 // private int writers = 0;
 // private boolean isWriting = false;
+// private final boolean prioritizeWriters;
+
+// public LibraryWithConditions(boolean prioritizeWriters) {
+// this.prioritizeWriters = prioritizeWriters;
+// }
 
 // public void startReading() throws InterruptedException {
 // lock.lock();
 // try {
-// while (writers > 0 || isWriting) {
+// while (writers > 0 || isWriting || (prioritizeWriters && writers > 0)) {
 // canRead.await();
 // }
 // readers++;
@@ -99,18 +107,28 @@
 // }
 // }
 
-// // Test wydajności dla obu implementacji
 // public static void main(String[] args) throws InterruptedException {
-// int readersCount = 50; // Przykładowa liczba czytelników
-// int writersCount = 5; // Przykładowa liczba pisarzy
+// int[] readersCounts = { 10, 50, 100 };
+// int[] writersCounts = { 1, 5, 10 };
+// boolean prioritizeWriters = true;
 
-// System.out.println("Testing LibraryWithSemaphores:");
-// LibraryWithSemaphores libraryWithSemaphores = new LibraryWithSemaphores();
+// for (int readersCount : readersCounts) {
+// for (int writersCount : writersCounts) {
+// System.out.println("\n[Config] Readers: " + readersCount + ", Writers: " +
+// writersCount);
+
+// System.out.println("\n--- Testing LibraryWithSemaphores ---");
+// LibraryWithSemaphores libraryWithSemaphores = new
+// LibraryWithSemaphores(prioritizeWriters);
 // testLibrary(libraryWithSemaphores, readersCount, writersCount);
 
-// System.out.println("\nTesting LibraryWithConditions:");
-// LibraryWithConditions libraryWithConditions = new LibraryWithConditions();
+// System.out.println("\n--- Testing LibraryWithConditions ---");
+// LibraryWithConditions libraryWithConditions = new
+// LibraryWithConditions(prioritizeWriters);
 // testLibrary(libraryWithConditions, readersCount, writersCount);
+// System.out.println("-----------------------------------\n");
+// }
+// }
 // }
 
 // private static void testLibrary(Object library, int readersCount, int
@@ -124,11 +142,11 @@
 // try {
 // if (library instanceof LibraryWithSemaphores) {
 // ((LibraryWithSemaphores) library).startReading();
-// Thread.sleep(100);
+// Thread.sleep(50);
 // ((LibraryWithSemaphores) library).finishReading();
 // } else if (library instanceof LibraryWithConditions) {
 // ((LibraryWithConditions) library).startReading();
-// Thread.sleep(100);
+// Thread.sleep(50);
 // ((LibraryWithConditions) library).finishReading();
 // }
 // } catch (InterruptedException e) {
@@ -142,11 +160,11 @@
 // try {
 // if (library instanceof LibraryWithSemaphores) {
 // ((LibraryWithSemaphores) library).startWriting();
-// Thread.sleep(200);
+// Thread.sleep(100);
 // ((LibraryWithSemaphores) library).finishWriting();
 // } else if (library instanceof LibraryWithConditions) {
 // ((LibraryWithConditions) library).startWriting();
-// Thread.sleep(200);
+// Thread.sleep(100);
 // ((LibraryWithConditions) library).finishWriting();
 // }
 // } catch (InterruptedException e) {
@@ -159,6 +177,6 @@
 // executor.awaitTermination(1, TimeUnit.MINUTES);
 
 // long endTime = System.currentTimeMillis();
-// System.out.println("Execution time: " + (endTime - startTime) + " ms");
+// System.out.println("Execution time: " + (endTime - startTime) + " ms\n");
 // }
 // }
