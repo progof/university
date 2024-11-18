@@ -1,6 +1,8 @@
 {
   "maven.view": "hierarchical",
   "files.associations": {
-    "gsl_sf_bessel.h": "c"
+    "gsl_sf_bessel.h": "c",
+    "stdio.h": "c",
+    "gsl_roots.h": "c"
   }
 }
