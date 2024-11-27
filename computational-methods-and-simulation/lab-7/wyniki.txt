@@ -1,0 +1,50 @@
+Rozmiar układu n: 10
+Czas dekompozycji LU: 0.000018 s
+Czas rozwiązywania układu: 0.000004 s
+Norma błędu ||Ax - b||: 1.692951e+01
+
+Rozmiar układu n: 110
+Czas dekompozycji LU: 0.000402 s
+Czas rozwiązywania układu: 0.000017 s
+Norma błędu ||Ax - b||: 1.514810e+02
+
+Rozmiar układu n: 210
+Czas dekompozycji LU: 0.002419 s
+Czas rozwiązywania układu: 0.000051 s
+Norma błędu ||Ax - b||: 4.154468e+03
+
+Rozmiar układu n: 310
+Czas dekompozycji LU: 0.007635 s
+Czas rozwiązywania układu: 0.000100 s
+Norma błędu ||Ax - b||: 4.603828e+02
+
+Rozmiar układu n: 410
+Czas dekompozycji LU: 0.017346 s
+Czas rozwiązywania układu: 0.000210 s
+Norma błędu ||Ax - b||: 4.746900e+02
+
+Rozmiar układu n: 510
+Czas dekompozycji LU: 0.032514 s
+Czas rozwiązywania układu: 0.000318 s
+Norma błędu ||Ax - b||: 4.868930e+02
+
+Rozmiar układu n: 610
+Czas dekompozycji LU: 0.060460 s
+Czas rozwiązywania układu: 0.000434 s
+Norma błędu ||Ax - b||: 6.595758e+02
+
+Rozmiar układu n: 710
+Czas dekompozycji LU: 0.101092 s
+Czas rozwiązywania układu: 0.000721 s
+Norma błędu ||Ax - b||: 6.998457e+02
+
+Rozmiar układu n: 810
+Czas dekompozycji LU: 0.146686 s
+Czas rozwiązywania układu: 0.000905 s
+Norma błędu ||Ax - b||: 8.624605e+02
+
+Rozmiar układu n: 910
+Czas dekompozycji LU: 0.195447 s
+Czas rozwiązywania układu: 0.000949 s
+Norma błędu ||Ax - b||: 1.014651e+03
+

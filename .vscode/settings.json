@@ -3,6 +3,18 @@
   "files.associations": {
     "gsl_sf_bessel.h": "c",
     "stdio.h": "c",
-    "gsl_roots.h": "c"
+    "gsl_roots.h": "c",
+    "__bit_reference": "c",
+    "__hash_table": "c",
+    "__split_buffer": "c",
+    "__tree": "c",
+    "array": "c",
+    "initializer_list": "c",
+    "ios": "c",
+    "set": "c",
+    "string": "c",
+    "string_view": "c",
+    "unordered_map": "c",
+    "vector": "c"
   }
 }
