@@ -21,7 +21,6 @@ int main()
     for (int i = 0; i < N; i++)
     {
         data[i] = cos(4 * M_PI * i / N) + ((float)rand() / RAND_MAX) / 8.0;
-        // Zapisujemy indeks i wartość sygnału z dokładnością do 6 miejsc po przecinku
         fprintf(file, "%d %.6f\n", i, data[i]);
     }
 

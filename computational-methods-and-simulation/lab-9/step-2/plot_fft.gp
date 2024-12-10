@@ -1,5 +1,5 @@
 set terminal png enhanced size 800,600
-set output 'spectrum_plot_2.png'
+set output 'spectrum_plot.png'
 
 set title "Spectrum of frequencies"
 set xlabel "Frequency"
