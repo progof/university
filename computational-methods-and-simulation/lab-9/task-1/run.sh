@@ -1,0 +1,1 @@
+gcc generate_signal.c -lm -o generate_signal && ./generate_signal && gnuplot plot_signal.gnuplot
