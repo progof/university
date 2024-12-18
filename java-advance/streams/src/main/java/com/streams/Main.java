@@ -8,13 +8,13 @@ public class Main {
 
     public static void main(String[] args) {
         List<Integer> numbers = Arrays.asList(45, 39, 17, 25, 10, 4);
-        System.out.println("Średnia: " + calculateAverageExcluding9and7(numbers));
+        System.out.println("\n" + "Average: " + calculateAverageExcluding9and7(numbers) + "\n");
 
         List<Integer> numbersForSquares = Arrays.asList(3, 10, 9, 4);
-        System.out.println("Wyniki bez zawierających cyfrę 9: " + calculateSquaresAndAddNine(numbersForSquares));
+        System.out.println("Results not containing numbers 9: " + calculateSquaresAndAddNine(numbersForSquares) + "\n");
 
         List<String> strings = Arrays.asList("aa", "cy", "b", "yycd", "c");
-        System.out.println("Stringi z 'y', pomijając te z 'yy': " + modifyStrings(strings));
+        System.out.println("Strings with 'y',omitting those of 'yy': " + modifyStrings(strings) + "\n");
     }
 
     public static double calculateAverageExcluding9and7(List<Integer> numbers) {
