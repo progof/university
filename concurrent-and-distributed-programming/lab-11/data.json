@@ -1,0 +1,28 @@
+{
+    "seq_result": {
+        "time": 0.5468,
+        "result": 3.14213320
+    },
+    "par_results": {
+        "result_1":{
+            "time": 0.5389,
+            "result": 3.14157120
+        },
+        "result_2":{
+            "time": 0.5364,
+            "result": 3.14027280
+        },
+        "result_5":{
+            "time": 0.6196,
+            "result": 3.14093920
+        },
+        "result_10":{
+            "time": 0.6490,
+            "result": 3.14073200
+        },
+        "result_20":{
+            "time":  0.5636,
+            "result": 3.14206920
+        }
+    }
+}
